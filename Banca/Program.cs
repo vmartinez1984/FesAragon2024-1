@@ -1,13 +1,45 @@
+using Banca.Bl;
 using Banca.Entities;
+using Banca.Helpers;
+using Banca.Repositorios.CodigosPostales;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<BancaContext>();
+builder.Services.AddScoped<CodigoPostalRepo>();
+builder.Services.AddScoped<CodigoPostalBl>();
+builder.Services.AddScoped<ClienteBl>();
+builder.Services.AddScoped<UnitOfWork>();
 
 builder.Services.AddControllersWithViews();
 
+//swagger
+builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options => options.AddPolicy("AllowWebApp",
+    builder => builder.AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    )
+);
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(typeof(FiltroDeExcepcion));
+});
+
+builder.Host.UseSerilog((hostContext, services, configuration) =>
+{
+    configuration.ReadFrom.Configuration(hostContext.Configuration);
+});
+
 var app = builder.Build();
+
+//swagger
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseCors("AllowWebApp");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

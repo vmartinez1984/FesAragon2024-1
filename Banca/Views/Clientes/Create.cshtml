@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>           
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Nombres" class="control-label"></label>
                 <input asp-for="Nombres" class="form-control" />
@@ -38,8 +38,17 @@
                 <span asp-validation-for="CalleYnumero" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="CodigoPostal" class="control-label"></label>
+                <input asp-for="CodigoPostal" class="form-control" />
+                <span asp-validation-for="CodigoPostal" class="text-danger"></span>
+                <button type="button" id="buttonBuscarCodigoPostal" class="btn btn-secondary" onclick="buscarCodigoPostal()">Buscar</button>
+            </div>
+
+            <div class="form-group">
                 <label asp-for="Colonia" class="control-label"></label>
-                <input asp-for="Colonia" class="form-control" />
+                <select asp-for="Colonia" class="form-select">
+                    <option>Seleccione</option>
+                </select>
                 <span asp-validation-for="Colonia" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -52,7 +61,7 @@
                 <input asp-for="Municipio" class="form-control" />
                 <span asp-validation-for="Municipio" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -65,5 +74,45 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function buscarCodigoPostal() {
+            var boton = document.getElementById('buttonBuscarCodigoPostal')
+            var codigoPostal = document.getElementById("CodigoPostal").value
+            //if (codigoPostal.lenght == 5)
+                fetch("/Api/CodigosPostales/" + codigoPostal)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                        colocarCodigosPostales(data)
+                    })                    
+        }
+
+        function colocarCodigosPostales(lista) {
+            var select = document.getElementById('Colonia')
+            select.innerHTML = ""
+            //debugger
+            if (lista.length == 1) {
+                var option = document.createElement('option')
+                option.value = lista[0].tipoDeAsentamiento + " " + lista[0].asentamiento
+                option.text = lista[0].tipoDeAsentamiento + " " + lista[0].asentamiento
+                select.appendChild(option)
+            } else {
+                var option = document.createElement('option')
+                //option.value = ""
+                option.text = "Seleccione"
+                select.appendChild(option)
+                lista.forEach(item => {
+                    var option = document.createElement('option')
+                    option.value = item.tipoDeAsentamiento + " " + item.asentamiento
+                    option.text = item.tipoDeAsentamiento + " " + item.asentamiento
+                    select.appendChild(option)
+                })
+            }
+            document.getElementById("Municipio").value = lista[0].alcaldia
+            document.getElementById("Estado").value = lista[0].estado
+        }
+    </script>
 }

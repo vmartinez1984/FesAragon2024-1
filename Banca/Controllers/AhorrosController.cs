@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Banca.Entities;
@@ -21,19 +17,19 @@ namespace Banca.Controllers
         // GET: Ahorros
         public async Task<IActionResult> Index()
         {
-            var bancaContext = _context.Ahorros.Include(a => a.IdNavigation);
+            var bancaContext = _context.Ahorro.Include(a => a.IdNavigation);
             return View(await bancaContext.ToListAsync());
         }
 
         // GET: Ahorros/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Ahorros == null)
+            if (id == null || _context.Ahorro == null)
             {
                 return NotFound();
             }
 
-            var ahorro = await _context.Ahorros
+            var ahorro = await _context.Ahorro
                 .Include(a => a.IdNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ahorro == null)
@@ -45,9 +41,9 @@ namespace Banca.Controllers
         }
 
         // GET: Ahorros/Create
-        public IActionResult Create()
+        public IActionResult Create(int clienteId)
         {
-            ViewData["Id"] = new SelectList(_context.Clientes, "Id", "Id");
+            ViewData["ClienteId"] = clienteId;
             return View();
         }
 
@@ -60,28 +56,28 @@ namespace Banca.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(ahorro);
+                _context.Ahorro.Add(ahorro);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Id"] = new SelectList(_context.Clientes, "Id", "Id", ahorro.Id);
+            ViewData["Id"] = new SelectList(_context.Cliente, "Id", "Id", ahorro.Id);
             return View(ahorro);
         }
 
         // GET: Ahorros/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Ahorros == null)
+            if (id == null || _context.Ahorro == null)
             {
                 return NotFound();
             }
 
-            var ahorro = await _context.Ahorros.FindAsync(id);
+            var ahorro = await _context.Ahorro.FindAsync(id);
             if (ahorro == null)
             {
                 return NotFound();
             }
-            ViewData["Id"] = new SelectList(_context.Clientes, "Id", "Id", ahorro.Id);
+            ViewData["Id"] = new SelectList(_context.Cliente, "Id", "Id", ahorro.Id);
             return View(ahorro);
         }
 
@@ -117,19 +113,19 @@ namespace Banca.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Id"] = new SelectList(_context.Clientes, "Id", "Id", ahorro.Id);
+            ViewData["Id"] = new SelectList(_context.Cliente, "Id", "Id", ahorro.Id);
             return View(ahorro);
         }
 
         // GET: Ahorros/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Ahorros == null)
+            if (id == null || _context.Ahorro == null)
             {
                 return NotFound();
             }
 
-            var ahorro = await _context.Ahorros
+            var ahorro = await _context.Ahorro
                 .Include(a => a.IdNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ahorro == null)
@@ -145,14 +141,14 @@ namespace Banca.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Ahorros == null)
+            if (_context.Ahorro == null)
             {
                 return Problem("Entity set 'BancaContext.Ahorros'  is null.");
             }
-            var ahorro = await _context.Ahorros.FindAsync(id);
+            var ahorro = await _context.Ahorro.FindAsync(id);
             if (ahorro != null)
             {
-                _context.Ahorros.Remove(ahorro);
+                _context.Ahorro.Remove(ahorro);
             }
             
             await _context.SaveChangesAsync();
@@ -161,7 +157,7 @@ namespace Banca.Controllers
 
         private bool AhorroExists(int id)
         {
-          return (_context.Ahorros?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Ahorro?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

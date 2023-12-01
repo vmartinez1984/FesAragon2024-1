@@ -1,35 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Banca.Entities;
+using Banca.Bl;
 
 namespace Banca.Controllers
 {
     public class ClientesController : Controller
     {
         private readonly BancaContext _context;
+        private readonly UnitOfWork _unitOfWork;
 
-        public ClientesController(BancaContext context)
+        public ClientesController(BancaContext context, UnitOfWork unitOfWork)
         {
             _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Clientes
         public async Task<IActionResult> Index()
         {
-              return _context.Clientes != null ? 
-                          View(await _context.Clientes.ToListAsync()) :
+              return _context.Cliente != null ? 
+                          View(await _unitOfWork.Cliente.ObtenerTodosAsync()) :
                           Problem("Entity set 'BancaContext.Clientes'  is null.");
         }
 
         // GET: Clientes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Clientes == null)
+            if (id == null || _context.Cliente == null)
             {
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes
+            var cliente = await _context.Cliente.Include(x=>x.Ahorros)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cliente == null)
             {
@@ -50,7 +53,7 @@ namespace Banca.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nombres,PrimerApellido,SegundoApellido,Rfc,CalleYnumero,Colonia,Estado,Municipio")] Cliente cliente)
+        public async Task<IActionResult> Create([Bind("Nombres,PrimerApellido,SegundoApellido,Rfc,CalleYnumero,Colonia,Estado,Municipio,CodigoPostal")] Cliente cliente)
         {
             if (ModelState.IsValid)
             {
@@ -64,12 +67,12 @@ namespace Banca.Controllers
         // GET: Clientes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Clientes == null)
+            if (id == null || _context.Cliente == null)
             {
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes.FindAsync(id);
+            var cliente = await _context.Cliente.FindAsync(id);
             if (cliente == null)
             {
                 return NotFound();
@@ -115,12 +118,12 @@ namespace Banca.Controllers
         // GET: Clientes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Clientes == null)
+            if (id == null || _context.Cliente == null)
             {
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes
+            var cliente = await _context.Cliente
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cliente == null)
             {
@@ -135,14 +138,14 @@ namespace Banca.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Clientes == null)
+            if (_context.Cliente == null)
             {
                 return Problem("Entity set 'BancaContext.Clientes'  is null.");
             }
-            var cliente = await _context.Clientes.FindAsync(id);
+            var cliente = await _context.Cliente.FindAsync(id);
             if (cliente != null)
             {
-                _context.Clientes.Remove(cliente);
+                _context.Cliente.Remove(cliente);
             }
             
             await _context.SaveChangesAsync();
@@ -151,7 +154,7 @@ namespace Banca.Controllers
 
         private bool ClienteExists(int id)
         {
-          return (_context.Clientes?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Cliente?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
