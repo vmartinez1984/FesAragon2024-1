@@ -4,11 +4,32 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Ahorros</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@* <form>
+    <div>
+        <label>Número de cuenta</label>
+        <input class="form-control" />
+        <button class="btn btn-primary">
+            Buscar
+        </button>
+    </div>
+    <div>
+    </div>
+</form>
+ *@
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="">Número de cuenta</span>
+    </div>
+    <input type="text" class="form-control" placeholder="####" aria-describedby="basic-addon2">
+    <div class="input-group-append">
+        <button class="btn btn-secondary" type="button">Buscar</button>
+    </div>
+</div>
+
+<hr />
+
 <table class="table">
     <thead>
         <tr>
@@ -16,7 +37,7 @@
                 @Html.DisplayNameFor(model => model.Balance)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ClienteId)
+                Cliente
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Nota)
@@ -27,39 +48,36 @@
             <th>
                 @Html.DisplayNameFor(model => model.EstaActivo)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdNavigation)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Balance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClienteId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nota)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaDeRegistro)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstaActivo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdNavigation.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Balance)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-controller="Clientes" asp-route-id="@item.ClienteId">
+                        @Html.DisplayFor(modelItem => item.Cliente.NombreCompleto)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nota)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaDeRegistro)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EstaActivo)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

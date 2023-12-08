@@ -17,7 +17,8 @@ namespace Banca.Controllers
         // GET: Ahorros
         public async Task<IActionResult> Index()
         {
-            var bancaContext = _context.Ahorro.Include(a => a.IdNavigation);
+            var bancaContext = _context.Ahorro                
+                .Include(a => a.Cliente);
             return View(await bancaContext.ToListAsync());
         }
 
@@ -30,7 +31,7 @@ namespace Banca.Controllers
             }
 
             var ahorro = await _context.Ahorro
-                .Include(a => a.IdNavigation)
+                .Include(a => a.Cliente)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ahorro == null)
             {
@@ -126,7 +127,7 @@ namespace Banca.Controllers
             }
 
             var ahorro = await _context.Ahorro
-                .Include(a => a.IdNavigation)
+                .Include(a => a.Cliente)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ahorro == null)
             {

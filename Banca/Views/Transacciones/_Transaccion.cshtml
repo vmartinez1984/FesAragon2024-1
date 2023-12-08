@@ -1,0 +1,54 @@
+﻿@using Banca.Entities
+@model Transaccion
+@{
+    string urlPost;
+
+    if (Model.Tipo == Tipo.Retiro)
+        urlPost = "/ahorros/" + Model.AhorroId + "/retirar";
+    else
+        urlPost = "/ahorros/" + Model.AhorroId + "/depositar";
+
+}
+<h4>Transaccion</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form action="@urlPost" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Cantidad" class="control-label"></label>
+                <input asp-for="Cantidad" class="form-control" />
+                <span asp-validation-for="Cantidad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tipo" class="control-label"></label>
+                <input class="form-control" disabled value="@Model.Tipo" />
+                <input class="form-control" asp-for="Tipo" type="hidden" />
+                <span asp-validation-for="Tipo" class="text-danger"></span>
+            </div>
+            @* <div class="form-group">
+            <label asp-for="FechaDeRegistro" class="control-label"></label>
+            <input asp-for="FechaDeRegistro" class="form-control" />
+            <span asp-validation-for="FechaDeRegistro" class="text-danger"></span>
+            </div> *@
+            <div class="form-group">
+                <label asp-for="AhorroId" class="control-label"></label>
+                <input class="form-control" value="@Model.AhorroId" disabled />
+                <input asp-for="AhorroId" type="hidden" />
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

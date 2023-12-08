@@ -1,0 +1,13 @@
+﻿@model Banca.Entities.Transaccion
+
+@{
+    ViewData["Title"] = "Depositar";
+}
+
+@using Banca.Entities
+
+@await Html.PartialAsync("_Transaccion", new Transaccion{
+    AhorroId = ViewBag.Ahorro.Id,
+    Tipo = Tipo.Deposito,
+    FechaDeRegistro = DateTime.Now
+})

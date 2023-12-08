@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Editar</h1>
 
 <h4>Cliente</h4>
 <hr />
@@ -53,7 +53,7 @@
                 <input asp-for="Municipio" class="form-control" />
                 <span asp-validation-for="Municipio" class="text-danger"></span>
             </div>
-            <div class="form-group">
+          @*   <div class="form-group">
                 <label asp-for="FechaDeRegistro" class="control-label"></label>
                 <input asp-for="FechaDeRegistro" class="form-control" />
                 <span asp-validation-for="FechaDeRegistro" class="text-danger"></span>
@@ -62,16 +62,16 @@
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="EstaActivo" /> @Html.DisplayNameFor(model => model.EstaActivo)
                 </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            </div> *@
+            <div class="form-group mt-3">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Regresar a la lista</a>
 </div>
 
 @section Scripts {

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Banca.Entities.Ahorro>
+
+<p>
+    <a asp-action="Create">Agregar ahorro</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Balance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nota)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaDeRegistro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstaActivo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Balance)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nota)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaDeRegistro)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EstaActivo)
+                </td>
+                <td>
+                <td>
+                    <a href="~/ahorros/@item.Id/depositar">Depositar</a> |
+                    <a href="~/ahorros/@item.Id/retirar">Retirar</a> |
+                    <a href="~/ahorros/@item.Id/detalles">Detalles</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Borrar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

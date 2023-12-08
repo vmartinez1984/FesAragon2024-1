@@ -11,6 +11,8 @@ builder.Services.AddScoped<BancaContext>();
 builder.Services.AddScoped<CodigoPostalRepo>();
 builder.Services.AddScoped<CodigoPostalBl>();
 builder.Services.AddScoped<ClienteBl>();
+builder.Services.AddScoped<AhorroBl>();
+builder.Services.AddScoped<TransaccionBl>();
 builder.Services.AddScoped<UnitOfWork>();
 
 builder.Services.AddControllersWithViews();
@@ -29,10 +31,10 @@ builder.Services.AddControllers(options =>
     options.Filters.Add(typeof(FiltroDeExcepcion));
 });
 
-builder.Host.UseSerilog((hostContext, services, configuration) =>
-{
-    configuration.ReadFrom.Configuration(hostContext.Configuration);
-});
+//builder.Host.UseSerilog((hostContext, services, configuration) =>
+//{
+//    configuration.ReadFrom.Configuration(hostContext.Configuration);
+//});
 
 var app = builder.Build();
 

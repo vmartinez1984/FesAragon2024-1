@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Banca.Entities;
 
@@ -45,4 +46,11 @@ public partial class Cliente
     public bool EstaActivo { get; set; } = true;
 
     public virtual List<Ahorro> Ahorros { get; set; }
+
+    [NotMapped]
+    public string NombreCompleto { get
+        {
+            return $"{Nombres} {PrimerApellido} {SegundoApellido}";
+        }
+    }
 }
