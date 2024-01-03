@@ -1,0 +1,28 @@
+﻿@model Banca.Dtos.BuscarClienteDto
+
+<div class="row">
+    <div class="col-md-6">    
+        <form asp-action="index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <label asp-for="Busqueda" class="input-group-text"></label>
+                </div>
+                <input asp-for="Busqueda" class="form-control" />
+                <span asp-validation-for="Busqueda" class="text-danger"></span>
+                <div class="input-group-append">
+                    <input type="submit" value="Buscar" class="btn btn-outline-primary" />
+                </div>
+                <div class="input-group-append">
+                    <a class="btn btn-outline-secondary" href="/clientes">Limpiar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -15,7 +15,7 @@ namespace Banca.Api
             _unitOfWork = unitOfWork;
         }
 
-        [HttpGet("{CodigoPostal}")]
+        [HttpGet("{codigoPostal}")]
         public async Task<IActionResult> Obtener(string codigoPostal)
         {
             try
@@ -23,7 +23,7 @@ namespace Banca.Api
                 List<CodigoPostalDto> lista;
 
                 lista = await _unitOfWork.CodigoPostal.Obtener(codigoPostal);
-                throw new Exception("Prueba");
+                //throw new Exception("Prueba");
 
                 return Ok(lista);
             }

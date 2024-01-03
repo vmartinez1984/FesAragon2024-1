@@ -1,20 +1,21 @@
-﻿@model IEnumerable<Banca.Entities.Cliente>
+﻿@using Banca.Dtos
+@model IEnumerable<Banca.Entities.Cliente>
 
 @{
     ViewData["Title"] = "Index";
+    string busqueda;
+    Paginador paginador;
+
+    paginador = ViewBag.Paginador;
+    busqueda = string.IsNullOrEmpty(paginador.Busqueda) ? string.Empty : paginador.Busqueda;
+
 }
 
 <h1>Clientes</h1>
 
-<div class="input-group mb-3">
-    <div class="input-group-prepend">
-        <span class="input-group-text" id="">Nombre de cliente</span>
-    </div>
-    <input type="text" class="form-control" placeholder="Maria Hernández" aria-describedby="basic-addon2">
-    <div class="input-group-append">
-        <button class="btn btn-secondary" type="button">Buscar</button>
-    </div>
-</div>
+@await Html.PartialAsync("_BuscarCliente", new BuscarClienteDto{
+    Busqueda = busqueda
+})
 
 <hr />
 
@@ -24,6 +25,9 @@
 <table class="table table-hover">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Nombres)
             </th>
@@ -50,46 +54,52 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FechaDeRegistro)
-            </th>           
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombres)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PrimerApellido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SegundoApellido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rfc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CalleYnumero)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Colonia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Municipio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaDeRegistro)
-            </td>           
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Borrar</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombres)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrimerApellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SegundoApellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rfc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CalleYnumero)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Colonia)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Municipio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaDeRegistro)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Detalles</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Borrar</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@await Html.PartialAsync("_Paginador", paginador)

@@ -1,11 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Banca.Dtos;
 
 namespace Banca.Entities;
 
 public partial class BancaContext : DbContext
 {
-    public BancaContext()
+    private readonly string conectionString;
+    public BancaContext(IConfiguration configuration)
     {
+        conectionString = configuration.GetConnectionString("SqlServer");
     }
 
     public BancaContext(DbContextOptions<BancaContext> options)
@@ -21,15 +24,16 @@ public partial class BancaContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        string conectionString;
-        
+
         //conectionString = "Data Source=192.168.1.86;Initial Catalog=Banca; Persist Security Info=True;User ID=sa;Password=Macross#2012; TrustServerCertificate=True;";
-        
-        //optionsBuilder.UseSqlServer(conectionString);
 
-        conectionString = "Server=localhost; Port=3306; Database=Banca; Uid=root; Pwd=;";
+        optionsBuilder.UseSqlServer(conectionString);
 
-        optionsBuilder.UseMySql(conectionString, ServerVersion.AutoDetect(conectionString));
+        //conectionString = "Server=localhost; Port=3306; Database=Banca; Uid=root; Pwd=;";
+
+        //optionsBuilder.UseMySql(conectionString, ServerVersion.AutoDetect(conectionString));
     }
+
+    public DbSet<Banca.Dtos.BuscarClienteDto> BuscarClienteDto { get; set; }
 
 }

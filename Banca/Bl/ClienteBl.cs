@@ -1,5 +1,6 @@
 ﻿using Banca.Entities;
 using Microsoft.EntityFrameworkCore;
+using Banca.Dtos;
 
 namespace Banca.Bl
 {
@@ -51,10 +52,48 @@ namespace Banca.Bl
             Cliente cliente;
 
             cliente = await _context.Cliente
-                .Include(x=> x.Ahorros)
-                .Where(x=> x.EstaActivo).FirstOrDefaultAsync();
+                .Include(x => x.Ahorros)
+                .Where(x => x.EstaActivo).FirstOrDefaultAsync();
 
             return cliente;
+        }
+
+        internal async Task<List<Cliente>> ObtenerAsync(Paginador paginador)
+        {
+            List<Cliente> lista;
+
+            lista = new List<Cliente>();
+            if (!string.IsNullOrEmpty(paginador.Busqueda))
+            {
+                lista = await _context.Cliente
+                    .Where(x => x.Nombres.Contains(paginador.Busqueda) || x.PrimerApellido.Contains(paginador.Busqueda) || x.SegundoApellido.Contains(paginador.Busqueda) || x.Id.ToString().Contains(paginador.Busqueda))                    
+                    .OrderBy(x => x.Id)
+                    .Skip((paginador.Pagina - 1) * paginador.NumeroDeRegistrosPorPagina)
+                    .Take(paginador.NumeroDeRegistrosPorPagina)
+                    .ToListAsync();
+                paginador.TotalDeRegistrosFiltrados = await _context.Cliente
+                 .Where(x => x.Nombres.Contains(paginador.Busqueda) || x.PrimerApellido.Contains(paginador.Busqueda) || x.SegundoApellido.Contains(paginador.Busqueda) || x.Id.ToString().Contains(paginador.Busqueda))                 
+                 .OrderBy(x => x.Id)
+                 .Skip((paginador.Pagina - 1) * paginador.NumeroDeRegistrosPorPagina)
+                 .Take(paginador.NumeroDeRegistrosPorPagina)
+                 .CountAsync();
+            }
+            else
+            {
+                lista = await _context.Cliente                    
+                    .OrderBy(x => x.Id)
+                    .Skip((paginador.Pagina - 1) * paginador.NumeroDeRegistrosPorPagina)
+                    .Take(paginador.NumeroDeRegistrosPorPagina)
+                    .ToListAsync();
+                paginador.TotalDeRegistrosFiltrados = await _context.Cliente                 
+                 .OrderBy(x => x.Id)
+                 .Skip((paginador.Pagina - 1) * paginador.NumeroDeRegistrosPorPagina)
+                 .Take(paginador.NumeroDeRegistrosPorPagina)
+                 .CountAsync();
+            }
+            paginador.TotalDeRegistros = await _context.Cliente.CountAsync();
+
+            return lista;
         }
     }
 }

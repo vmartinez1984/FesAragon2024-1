@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Banca.Entities;
 using Banca.Bl;
+using Banca.Dtos;
 
 namespace Banca.Controllers
 {
@@ -17,12 +18,16 @@ namespace Banca.Controllers
         }
 
         // GET: Clientes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Paginador paginador)
         {
-              return _context.Cliente != null ? 
-                          View(await _unitOfWork.Cliente.ObtenerTodosAsync()) :
-                          Problem("Entity set 'BancaContext.Clientes'  is null.");
+            List<Cliente> clientes;
+
+            clientes = await _unitOfWork.Cliente.ObtenerAsync(paginador);
+            ViewBag.Paginador = paginador;
+
+            return View(clientes);
         }
+
 
         // GET: Clientes/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -32,7 +37,7 @@ namespace Banca.Controllers
                 return NotFound();
             }
 
-            var cliente = await _context.Cliente.Include(x=>x.Ahorros)
+            var cliente = await _context.Cliente.Include(x => x.Ahorros)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cliente == null)
             {
@@ -147,14 +152,14 @@ namespace Banca.Controllers
             {
                 _context.Cliente.Remove(cliente);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ClienteExists(int id)
         {
-          return (_context.Cliente?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Cliente?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

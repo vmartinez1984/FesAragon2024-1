@@ -1,0 +1,26 @@
+﻿@using Banca.Dtos
+@model Paginador
+
+<div>
+    <ul class="pagination">
+        @if (Model.Pagina == 1)
+        {
+            <li class="page-item disabled">
+                @Html.ActionLink("Anterior",null, new { page = 1}, new{@class = "page-link" })
+            </li>
+        }
+        else
+        {
+            <li class="page-item">@Html.ActionLink("Anterior",null, new { page = Model.Pagina - 1}, new{@class = "page-link" })</li>
+        }
+
+       @if (Model.Pagina == Model.CountPage || Model.CountPage == 0)
+        {
+            <li class="page-item disabled">@Html.ActionLink("Siguiente",null, new{page = Model.CountPage}, new{@class = "page-link" } )</li>
+        }
+        else
+        { 
+            <li class="page-item">@Html.ActionLink("Siguiente", null, new { Pagina = Model.Pagina +1}, new{@class = "page-link" })</li>
+        }
+    </ul>
+</div>
