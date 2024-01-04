@@ -33,6 +33,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th></th>
             <th>
                 @Html.DisplayNameFor(model => model.Balance)
             </th>
@@ -56,6 +57,9 @@
         {
             <tr>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Balance)
                 </td>
                 <td>
@@ -73,9 +77,11 @@
                     @Html.DisplayFor(modelItem => item.EstaActivo)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a href="~/ahorros/@item.Id/depositar">Depositar</a> |
+                    <a href="~/ahorros/@item.Id/retirar">Retirar</a> |
+                    @* <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> | *@
+                    <a href="~/ahorros/@item.Id/detalles">Detalles</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Borrar</a>
                 </td>
             </tr>
         }

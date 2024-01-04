@@ -41,6 +41,7 @@ public partial class Cliente
     public string Municipio { get; set; } = null!;
 
     [Display(Name = "Registro")]
+    [DataType(DataType.Date)]
     public DateTime FechaDeRegistro { get; set; }= DateTime.Now;
 
     public bool EstaActivo { get; set; } = true;

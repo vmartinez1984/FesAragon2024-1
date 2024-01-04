@@ -67,6 +67,10 @@
     </dl>
 </div>
 
+<p>
+    <a asp-action="Create" asp-controller="ahorros" asp-route-clienteId="@Model?.Id">Agregar ahorro</a>
+</p>
+
 @await Html.PartialAsync("../Ahorros/_ListaDeAhorros", Model.Ahorros)
 
 <div>
